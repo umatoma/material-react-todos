@@ -10,6 +10,8 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import todosReducer from './reducers/todos';
 import App from './containers/App';
 import Home from './containers/Home';
+import About from './containers/About';
+import NotFound from './containers/NotFound';
 import progressBar from './containers/ProgressBar';
 
 injectTapEventPlugin();
@@ -27,6 +29,8 @@ render(
     <Router history={history}>
       <Route path="/" component={App}>
         <IndexRoute component={progressBar(Home)} />
+        <Route path="about" component={About} />
+        <Route path="*" component={NotFound}/>
       </Route>
     </Router>
   </Provider>,
