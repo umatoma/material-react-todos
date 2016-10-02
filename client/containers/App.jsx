@@ -6,6 +6,14 @@ import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import { blueGrey900 } from 'material-ui/styles/colors';
+
+const styleFooter = {
+  backgroundColor: blueGrey900,
+  color: '#fff',
+  textAlign: 'center',
+  padding: '64px 0'
+};
 
 const App = ({ children }) => (
   <MuiThemeProvider>
@@ -27,6 +35,9 @@ const App = ({ children }) => (
         }
       />
       <div>{children}</div>
+      <footer style={styleFooter}>
+        <span>Copyright (C) 2016 umatoma. All Rights Reserved.</span>
+      </footer>
     </div>
   </MuiThemeProvider>
 );
