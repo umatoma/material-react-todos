@@ -21,23 +21,25 @@ const App = ({ children }) => (
   <MuiThemeProvider>
     <div>
       <div style={{ marginLeft: '256px' }}>
-        <AppBar
-          title="Material React Todos"
-          iconElementRight={
-            <IconMenu
-              iconButtonElement={
-                <IconButton><MoreVertIcon /></IconButton>
-              }
-              targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-            >
-              <MenuItem primaryText="Top" onTouchTap={() => { browserHistory.push('/'); }} />
-              <MenuItem primaryText="About" onTouchTap={() => { browserHistory.push('/about'); }} />
-              <MenuItem primaryText="Help" onTouchTap={() => { browserHistory.push('/help'); }} />
-            </IconMenu>
-          }
-        />
-        <div>{children}</div>
+        <div style={{ minHeight: '100vh' }}>
+          <AppBar
+            title="Material React Todos"
+            iconElementRight={
+              <IconMenu
+                iconButtonElement={
+                  <IconButton><MoreVertIcon /></IconButton>
+                }
+                targetOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+              >
+                <MenuItem primaryText="Top" onTouchTap={() => { browserHistory.push('/'); }} />
+                <MenuItem primaryText="About" onTouchTap={() => { browserHistory.push('/about'); }} />
+                <MenuItem primaryText="Help" onTouchTap={() => { browserHistory.push('/help'); }} />
+              </IconMenu>
+            }
+          />
+          <div style={{ padding: '8px' }}>{children}</div>
+        </div>
         <footer style={styleFooter}>
           <span>Copyright (C) 2016 umatoma. All Rights Reserved.</span>
         </footer>
