@@ -7,6 +7,8 @@ import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import { blue500 } from 'material-ui/styles/colors';
+import Row from '../components/grid/Row';
+import Col from '../components/grid/Col';
 import * as actions from '../actions/todos';
 
 const mapStateToProps = state => ({ todos: state.todos });
@@ -55,29 +57,33 @@ class Home extends React.Component {
     }
 
     return (
-      <div>
-        <Card style={{ padding: '16px', marginBottom: '8px' }}>
-          <form onSubmit={this.handleSubmitTodoForm}>
-            <TextField
-              floatingLabelText="Todo"
-              fullWidth
-              onChange={(e) => { this.setState({ formTodo: e.target.value }); }}
-              value={this.state.formTodo}
-            />
-          </form>
-        </Card>
-        <Card>
-          <List>
-            {todos.todos.map(todo =>
-              <ListItem
-                key={todo.id}
-                leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
-                primaryText={todo.text}
+      <Row>
+        <Col xs={12}>
+          <Card style={{ padding: '16px' }}>
+            <form onSubmit={this.handleSubmitTodoForm}>
+              <TextField
+                floatingLabelText="Todo"
+                fullWidth
+                onChange={(e) => { this.setState({ formTodo: e.target.value }); }}
+                value={this.state.formTodo}
               />
-            )}
-          </List>
-        </Card>
-      </div>
+            </form>
+          </Card>
+        </Col>
+        <Col xs={12}>
+          <Card>
+            <List>
+              {todos.todos.map(todo =>
+                <ListItem
+                  key={todo.id}
+                  leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
+                  primaryText={todo.text}
+                />
+              )}
+            </List>
+          </Card>
+        </Col>
+      </Row>
     );
   }
 }
