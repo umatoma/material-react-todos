@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 export const ACTIONS = {
   SET_TODOS: 'SET_TODOS',
-  ADD_TODO: 'ADD_TODO'
+  ADD_TODO: 'ADD_TODO',
+  UPDATE_TODO: 'UPDATE_TODO'
 };
 
 export function setTodos(todos) {
@@ -11,6 +12,10 @@ export function setTodos(todos) {
 
 export function addTodo(todo) {
   return { type: ACTIONS.ADD_TODO, payload: { todo } };
+}
+
+export function updateTodo(todo) {
+  return { type: ACTIONS.UPDATE_TODO, payload: { todo } };
 }
 
 export function apiGetTodos() {
@@ -41,4 +46,13 @@ export function apiPostTodo(text) {
       }, 500);
     });
   };
+}
+
+export function apiPutTodo(todo) {
+  return dispatch => new Promise((resolve) => {
+    setTimeout(() => {
+      dispatch(updateTodo(todo));
+      resolve();
+    }, 500);
+  });
 }

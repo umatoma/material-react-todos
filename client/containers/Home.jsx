@@ -3,11 +3,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
+import IconMenu from 'material-ui/IconMenu';
+import MenuItem from 'material-ui/MenuItem';
+import IconButton from 'material-ui/IconButton';
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDone from 'material-ui/svg-icons/action/done';
-import { blue500, green500 } from 'material-ui/styles/colors';
+import { blue500, green500, grey400 } from 'material-ui/styles/colors';
 import Row from '../components/grid/Row';
 import Col from '../components/grid/Col';
 import * as actions from '../actions/todos';
@@ -23,12 +27,14 @@ class Home extends React.Component {
       todos: React.PropTypes.array.isRequired
     }).isRequired,
     apiGetTodos: PropTypes.func.isRequired,
-    apiPostTodo: PropTypes.func.isRequired
+    apiPostTodo: PropTypes.func.isRequired,
+    apiPutTodo: PropTypes.func.isRequired
   };
 
   constructor() {
     super();
     this.handleSubmitTodoForm = this.handleSubmitTodoForm.bind(this);
+    this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
     this.state = {
       formTodo: ''
     };
@@ -47,10 +53,48 @@ class Home extends React.Component {
       .then(() => { this.setState({ formTodo: '' }); });
   }
 
+  handleOnTouchTapMenuItem(type, todo) {
+    return (e) => {
+      e.preventDefault();
+      switch (type) {
+        case 'COMPLETE': {
+          const updatedTodo = Object.assign({}, todo, { completed: true });
+          this.props.apiPutTodo(updatedTodo);
+          break;
+        }
+        case 'DELETE':
+          console.log('DELETE', todo)
+          break;
+        default:
+          break;
+      }
+    };
+  }
+
+  rightIconMenu(todo) {
+    return (
+      <IconMenu
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon color={grey400} />
+          </IconButton>
+        }
+      >
+        <MenuItem onTouchTap={this.handleOnTouchTapMenuItem('COMPLETE', todo)}>
+          Complete
+        </MenuItem>
+        <MenuItem onTouchTap={this.handleOnTouchTapMenuItem('DELETE', todo)}>
+          Delete
+        </MenuItem>
+      </IconMenu>
+    );
+  }
+
   render() {
     const { todos } = this.props;
     const completedTodos = todos.todos.filter(t => t.completed);
     const doingTodos = todos.todos.filter(t => !t.completed);
+
     if (this.props.isLoading) {
       return (
         <Card>
@@ -82,6 +126,7 @@ class Home extends React.Component {
                   key={todo.id}
                   leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
                   primaryText={todo.text}
+                  rightIconButton={this.rightIconMenu(todo)}
                 />
               )}
             </List>
