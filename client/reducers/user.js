@@ -1,7 +1,7 @@
 import { ACTIONS } from '../actions/user';
 
 const initialState = {
-  id: null,
+  id: '',
   lists: []
 };
 
