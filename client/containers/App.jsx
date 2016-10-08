@@ -5,10 +5,8 @@ import { browserHistory } from 'react-router';
 import CircularProgress from 'material-ui/CircularProgress';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
-import IconButton from 'material-ui/IconButton';
-import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import FlatButton from 'material-ui/FlatButton';
 import ChevronRight from 'material-ui/svg-icons/navigation/chevron-right';
 import { pink500, blueGrey900 } from 'material-ui/styles/colors';
 import * as userActions from '../actions/user';
@@ -18,10 +16,13 @@ const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch)
 
 class App extends React.Component {
   static propTypes = {
+    children: PropTypes.element.isRequired,
     isLoading: PropTypes.bool.isRequired,
+    user: PropTypes.shape({
+      id: PropTypes.string.isRequired // eslint-disable-line react/no-unused-prop-types
+    }).isRequired,
     finishLoading: PropTypes.func.isRequired,
-    apiGetUser: PropTypes.func.isRequired,
-    children: PropTypes.element.isRequired
+    apiGetUser: PropTypes.func.isRequired
   };
 
   static styleFooter = {
@@ -38,7 +39,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { children, isLoading } = this.props;
+    const { children, isLoading, user } = this.props;
 
     if (isLoading) {
       return (
@@ -54,19 +55,7 @@ class App extends React.Component {
           <div style={{ minHeight: '100vh' }}>
             <AppBar
               title="Material React Todos"
-              iconElementRight={
-                <IconMenu
-                  iconButtonElement={
-                    <IconButton><MoreVertIcon /></IconButton>
-                  }
-                  targetOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-                >
-                  <MenuItem primaryText="Top" onTouchTap={() => { browserHistory.push('/'); }} />
-                  <MenuItem primaryText="About" onTouchTap={() => { browserHistory.push('/about'); }} />
-                  <MenuItem primaryText="Help" onTouchTap={() => { browserHistory.push('/help'); }} />
-                </IconMenu>
-              }
+              iconElementRight={<FlatButton label={user.id} />}
             />
             <div style={{ padding: '8px' }}>{children}</div>
           </div>
