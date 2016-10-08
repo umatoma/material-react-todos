@@ -7,6 +7,8 @@ import { syncHistoryWithStore, routerReducer } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import createLogger from 'redux-logger';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import userReducer from './reducers/user';
 import todosReducer from './reducers/todos';
 import App from './containers/App';
 import Home from './containers/Home';
@@ -17,6 +19,7 @@ import progressBar from './containers/ProgressBar';
 injectTapEventPlugin();
 
 const reducers = combineReducers({
+  user: userReducer,
   todos: todosReducer,
   routing: routerReducer
 });
@@ -25,14 +28,16 @@ const store = createStore(reducers, applyMiddleware(thunk, loggerMiddleware));
 const history = syncHistoryWithStore(browserHistory, store);
 
 render(
-  <Provider store={store}>
-    <Router history={history}>
-      <Route path="/" component={App}>
-        <IndexRoute component={progressBar(Home)} />
-        <Route path="about" component={About} />
-        <Route path="*" component={NotFound}/>
-      </Route>
-    </Router>
-  </Provider>,
+  <MuiThemeProvider>
+    <Provider store={store}>
+      <Router history={history}>
+        <Route path="/" component={progressBar(App, { showProgress: false })}>
+          <IndexRoute component={progressBar(Home)} />
+          <Route path="about" component={About} />
+          <Route path="*" component={NotFound} />
+        </Route>
+      </Router>
+    </Provider>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
