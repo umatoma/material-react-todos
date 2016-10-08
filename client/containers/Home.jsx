@@ -12,8 +12,7 @@ import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import { blue500, green500, grey400 } from 'material-ui/styles/colors';
-import Row from '../components/grid/Row';
-import Col from '../components/grid/Col';
+import { Row, Col } from '../components/grid';
 import * as actions from '../actions/todos';
 
 const mapStateToProps = state => ({ todos: state.todos });
