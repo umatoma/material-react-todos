@@ -1,12 +1,13 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Card, CardText } from 'material-ui/Card';
+import { Card, CardText, CardTitle } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
-import { blue500 } from 'material-ui/styles/colors';
+import ActionDone from 'material-ui/svg-icons/action/done';
+import { blue500, green500 } from 'material-ui/styles/colors';
 import Row from '../components/grid/Row';
 import Col from '../components/grid/Col';
 import * as actions from '../actions/todos';
@@ -48,6 +49,8 @@ class Home extends React.Component {
 
   render() {
     const { todos } = this.props;
+    const completedTodos = todos.todos.filter(t => t.completed);
+    const doingTodos = todos.todos.filter(t => !t.completed);
     if (this.props.isLoading) {
       return (
         <Card>
@@ -70,13 +73,28 @@ class Home extends React.Component {
             </form>
           </Card>
         </Col>
-        <Col xs={12}>
+        <Col xs={6}>
           <Card>
+            <CardTitle title="Doing" />
             <List>
-              {todos.todos.map(todo =>
+              {doingTodos.map(todo =>
                 <ListItem
                   key={todo.id}
                   leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
+                  primaryText={todo.text}
+                />
+              )}
+            </List>
+          </Card>
+        </Col>
+        <Col xs={6} style={{ paddingLeft: '0' }}>
+          <Card>
+            <CardTitle title="Completed" />
+            <List>
+              {completedTodos.map(todo =>
+                <ListItem
+                  key={todo.id}
+                  leftAvatar={<Avatar icon={<ActionDone />} backgroundColor={green500} />}
                   primaryText={todo.text}
                 />
               )}

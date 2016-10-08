@@ -15,7 +15,11 @@ export function addTodo(todo) {
 
 export function apiGetTodos() {
   return (dispatch) => {
-    const todos = _.times(10).map(i => ({ id: i, text: `Todo List ${i}` }));
+    const todos = _.times(10).map(i => ({
+      id: i,
+      text: `Todo List ${i}`,
+      completed: (Math.random() >= 0.5)
+    }));
     return new Promise((resolve) => {
       setTimeout(() => {
         dispatch(setTodos(todos));
@@ -29,7 +33,7 @@ export function apiPostTodo(text) {
   return (dispatch, getState) => {
     const { todos } = getState();
     const id = todos.todos.length;
-    const todo = { id, text };
+    const todo = { id, text, completed: false };
     return new Promise((resolve) => {
       setTimeout(() => {
         dispatch(addTodo(todo));

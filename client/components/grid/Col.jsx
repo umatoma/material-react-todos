@@ -31,7 +31,12 @@ const defaultStyle = {
 };
 
 const Col = props => (
-  <div className={getClassNames(props)} style={props.style || defaultStyle}>{props.children}</div>
+  <div
+    className={getClassNames(props)}
+    style={Object.assign({}, defaultStyle, props.style)}
+  >
+    {props.children}
+  </div>
 );
 
 Col.propTypes = {
