@@ -27,7 +27,8 @@ class Home extends React.Component {
     }).isRequired,
     apiGetTodos: PropTypes.func.isRequired,
     apiPostTodo: PropTypes.func.isRequired,
-    apiPutTodo: PropTypes.func.isRequired
+    apiPutTodo: PropTypes.func.isRequired,
+    apiDeleteTodo: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -61,9 +62,11 @@ class Home extends React.Component {
           this.props.apiPutTodo(updatedTodo);
           break;
         }
-        case 'DELETE':
-          console.log('DELETE', todo)
+        case 'DELETE': {
+          const id = todo.id;
+          this.props.apiDeleteTodo(id);
           break;
+        }
         default:
           break;
       }

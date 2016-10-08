@@ -3,7 +3,8 @@ import _ from 'lodash';
 export const ACTIONS = {
   SET_TODOS: 'SET_TODOS',
   ADD_TODO: 'ADD_TODO',
-  UPDATE_TODO: 'UPDATE_TODO'
+  UPDATE_TODO: 'UPDATE_TODO',
+  REMOVE_TODO: 'REMOVE_TODO'
 };
 
 export function setTodos(todos) {
@@ -16,6 +17,10 @@ export function addTodo(todo) {
 
 export function updateTodo(todo) {
   return { type: ACTIONS.UPDATE_TODO, payload: { todo } };
+}
+
+export function removeTodo(id) {
+  return { type: ACTIONS.REMOVE_TODO, payload: { id } };
 }
 
 export function apiGetTodos() {
@@ -52,6 +57,15 @@ export function apiPutTodo(todo) {
   return dispatch => new Promise((resolve) => {
     setTimeout(() => {
       dispatch(updateTodo(todo));
+      resolve();
+    }, 500);
+  });
+}
+
+export function apiDeleteTodo(id) {
+  return dispatch => new Promise((resolve) => {
+    setTimeout(() => {
+      dispatch(removeTodo(id));
       resolve();
     }, 500);
   });

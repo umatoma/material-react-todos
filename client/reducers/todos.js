@@ -15,6 +15,11 @@ export default (state = initialState, action) => {
       const todos = state.todos.map(t => ((todo.id === t.id) ? todo : t));
       return { ...state, todos };
     }
+    case ACTIONS.REMOVE_TODO: {
+      const { id } = action.payload;
+      const todos = state.todos.filter(t => (id !== t.id));
+      return { ...state, todos };
+    }
     default:
       return state;
   }
