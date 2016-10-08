@@ -126,7 +126,7 @@ class Home extends React.Component {
               {doingTodos.map(todo =>
                 <ListItem
                   key={todo.id}
-                  leftAvatar={<Avatar icon={<ActionAssignment />} backgroundColor={blue500} />}
+                  leftIcon={<ActionAssignment color={blue500} />}
                   primaryText={todo.text}
                   rightIconButton={this.rightIconMenu(todo)}
                 />
@@ -141,7 +141,7 @@ class Home extends React.Component {
               {completedTodos.map(todo =>
                 <ListItem
                   key={todo.id}
-                  leftAvatar={<Avatar icon={<ActionDone />} backgroundColor={green500} />}
+                  leftIcon={<ActionDone color={green500} />}
                   primaryText={todo.text}
                 />
               )}

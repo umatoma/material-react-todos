@@ -10,7 +10,11 @@ export function apiGetUser() {
   return (dispatch) => {
     const user = {
       id: 'umatoma',
-      lists: ['list_a', 'list_b', 'list_c']
+      lists: [
+        { id: 'list_a', name: 'List A' },
+        { id: 'list_b', name: 'List B' },
+        { id: 'list_c', name: 'List C' }
+      ]
     };
     return new Promise((resolve) => {
       setTimeout(() => {
