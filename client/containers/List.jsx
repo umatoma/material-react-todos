@@ -13,6 +13,7 @@ import { blue500, green500, grey400 } from 'material-ui/styles/colors';
 import { Row, Col } from '../components/grid';
 import FormAddTodo from '../components/forms/AddTodo';
 import * as listActions from '../actions/list';
+import Canceler from '../lib/promise-canceler';
 
 const mapStateToProps = (state, ownProps) => ({
   list: state.list,
@@ -39,7 +40,7 @@ class ListContainer extends React.Component {
     super();
     this.onSubmitFormAddTodo = this.onSubmitFormAddTodo.bind(this);
     this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
-    this.promiseSet = new Set();
+    this.canceler = new Canceler();
     this.state = {
       formTodo: ''
     };
@@ -51,7 +52,7 @@ class ListContainer extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.params.listId !== this.props.listId) {
-      this.cancelPromises();
+      this.canceler.cancelAll();
       this.props.startLoading();
       this.fetchList();
     }
@@ -59,26 +60,14 @@ class ListContainer extends React.Component {
 
   onSubmitFormAddTodo({ text }) {
     const p = this.props.apiPostTodo(text);
-    return this.addPromiseSet(p);
+    return this.canceler.add(p);
   }
 
   fetchList() {
     const p = this.props
       .apiGetList(this.props.listId)
       .then(() => { this.props.finishLoading(); });
-    this.addPromiseSet(p);
-  }
-
-  addPromiseSet(p) {
-    this.promiseSet.add(p);
-    return p;
-  }
-
-  cancelPromises() {
-    for (const v of this.promiseSet.values()) {
-      v.cancel();
-    }
-    this.promiseSet.clear();
+    this.canceler.add(p);
   }
 
   handleOnTouchTapMenuItem(type, todo) {
