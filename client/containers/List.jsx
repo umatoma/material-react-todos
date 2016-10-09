@@ -39,6 +39,7 @@ class ListContainer extends React.Component {
     super();
     this.handleSubmitTodoForm = this.handleSubmitTodoForm.bind(this);
     this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
+    this.fetchListPromise = null;
     this.state = {
       formTodo: ''
     };
@@ -50,13 +51,14 @@ class ListContainer extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.params.listId !== this.props.listId) {
+      this.fetchListPromise.cancel();
       this.props.startLoading();
       this.fetchList();
     }
   }
 
   fetchList() {
-    this.props
+    this.fetchListPromise = this.props
       .apiGetList(this.props.listId)
       .then(() => { this.props.finishLoading(); });
   }

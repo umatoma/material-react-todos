@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Promise from '../lib/promise';
 
 export const ACTIONS = {
   SET_LIST: 'SET_LIST',
@@ -25,18 +26,16 @@ export function removeTodo(id) {
 
 export function apiGetList(id) {
   return (dispatch) => {
-    const todos = _.times(10).map(i => ({
+    const todos = _.times(15).map(i => ({
       id: `${id}-${i}`,
-      text: `Todo List ${i}`,
+      text: `Todo List ${id}-${i}`,
       completed: (Math.random() >= 0.5)
     }));
     const list = { id, name: id.toUpperCase(), todos };
     return new Promise((resolve) => {
-      setTimeout(() => {
-        dispatch(setList(list));
-        resolve();
-      }, 3000);
-    });
+      setTimeout(() => { resolve(); }, 3000);
+    })
+    .then(() => { dispatch(setList(list)); });
   };
 }
 
