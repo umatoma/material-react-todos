@@ -45,10 +45,13 @@ export function apiPostTodo(text) {
     const id = list.todos.length;
     const todo = { id, text, completed: false };
     return new Promise((resolve) => {
-      setTimeout(() => {
-        dispatch(addTodo(todo));
-        resolve();
-      }, 500);
+      setTimeout(() => { resolve(); }, 500);
+    })
+    .then(() => {
+      if (todo.text.trim().length === 0) {
+        return Promise.reject(new Error('This field is required.'));
+      }
+      return dispatch(addTodo(todo));
     });
   };
 }

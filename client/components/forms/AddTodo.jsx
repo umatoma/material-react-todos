@@ -7,7 +7,7 @@ class AddTodo extends React.Component {
   };
 
   static getInitialState() {
-    return { text: '' };
+    return { text: '', error: null };
   }
 
   constructor() {
@@ -20,7 +20,7 @@ class AddTodo extends React.Component {
     e.preventDefault();
     this.props.onSubmit(this.state)
       .then(() => { this.setState(AddTodo.getInitialState()); })
-      .catch((err) => { console.log(err); });
+      .catch((err) => { this.setState({ error: err.message }); });
   }
 
   render() {
@@ -28,6 +28,7 @@ class AddTodo extends React.Component {
       <form onSubmit={this.handleSubmit}>
         <TextField
           floatingLabelText="Todo"
+          errorText={this.state.error}
           fullWidth
           onChange={(e) => { this.setState({ text: e.target.value }); }}
           value={this.state.text}
