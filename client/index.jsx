@@ -9,7 +9,7 @@ import createLogger from 'redux-logger';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import userReducer from './reducers/user';
-import todosReducer from './reducers/todos';
+import listReducer from './reducers/list';
 import App from './containers/App';
 import Home from './containers/Home';
 import About from './containers/About';
@@ -20,7 +20,7 @@ injectTapEventPlugin();
 
 const reducers = combineReducers({
   user: userReducer,
-  todos: todosReducer,
+  list: listReducer,
   routing: routerReducer
 });
 const loggerMiddleware = createLogger();

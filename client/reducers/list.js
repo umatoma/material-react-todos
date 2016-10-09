@@ -1,4 +1,4 @@
-import { ACTIONS } from '../actions/todos';
+import { ACTIONS } from '../actions/list';
 
 const initialState = {
   todos: []

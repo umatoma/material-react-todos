@@ -7,23 +7,22 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import Avatar from 'material-ui/Avatar';
 import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import { blue500, green500, grey400 } from 'material-ui/styles/colors';
 import { Row, Col } from '../components/grid';
-import * as actions from '../actions/todos';
+import * as listActions from '../actions/list';
 
-const mapStateToProps = state => ({ todos: state.todos });
-const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
+const mapStateToProps = state => ({ list: state.list });
+const mapDispatchToProps = dispatch => bindActionCreators(listActions, dispatch);
 
 class Home extends React.Component {
   static propTypes = {
     isLoading: PropTypes.bool.isRequired,
     finishLoading: PropTypes.func.isRequired,
-    todos: PropTypes.shape({
-      todos: React.PropTypes.array.isRequired
+    list: PropTypes.shape({
+      todos: React.PropTypes.array.isRequired // eslint-disable-line react/no-unused-prop-types
     }).isRequired,
     apiGetTodos: PropTypes.func.isRequired,
     apiPostTodo: PropTypes.func.isRequired,
@@ -93,9 +92,9 @@ class Home extends React.Component {
   }
 
   render() {
-    const { todos } = this.props;
-    const completedTodos = todos.todos.filter(t => t.completed);
-    const doingTodos = todos.todos.filter(t => !t.completed);
+    const { list } = this.props;
+    const completedTodos = list.todos.filter(t => t.completed);
+    const doingTodos = list.todos.filter(t => !t.completed);
 
     if (this.props.isLoading) {
       return (
