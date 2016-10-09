@@ -1,14 +1,14 @@
 import _ from 'lodash';
 
 export const ACTIONS = {
-  SET_TODOS: 'SET_TODOS',
+  SET_LIST: 'SET_LIST',
   ADD_TODO: 'ADD_TODO',
   UPDATE_TODO: 'UPDATE_TODO',
   REMOVE_TODO: 'REMOVE_TODO'
 };
 
-export function setTodos(todos) {
-  return { type: ACTIONS.SET_TODOS, payload: { todos } };
+export function setList(list) {
+  return { type: ACTIONS.SET_LIST, payload: { list } };
 }
 
 export function addTodo(todo) {
@@ -23,16 +23,17 @@ export function removeTodo(id) {
   return { type: ACTIONS.REMOVE_TODO, payload: { id } };
 }
 
-export function apiGetTodos() {
+export function apiGetList(id) {
   return (dispatch) => {
     const todos = _.times(10).map(i => ({
-      id: i,
+      id: `${id}-${i}`,
       text: `Todo List ${i}`,
       completed: (Math.random() >= 0.5)
     }));
+    const list = { id, name: id.toUpperCase(), todos };
     return new Promise((resolve) => {
       setTimeout(() => {
-        dispatch(setTodos(todos));
+        dispatch(setList(list));
         resolve();
       }, 3000);
     });

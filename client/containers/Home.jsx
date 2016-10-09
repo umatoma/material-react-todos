@@ -24,7 +24,7 @@ class Home extends React.Component {
     list: PropTypes.shape({
       todos: React.PropTypes.array.isRequired // eslint-disable-line react/no-unused-prop-types
     }).isRequired,
-    apiGetTodos: PropTypes.func.isRequired,
+    apiGetList: PropTypes.func.isRequired,
     apiPostTodo: PropTypes.func.isRequired,
     apiPutTodo: PropTypes.func.isRequired,
     apiDeleteTodo: PropTypes.func.isRequired
@@ -41,7 +41,7 @@ class Home extends React.Component {
 
   componentDidMount() {
     this.props
-      .apiGetTodos()
+      .apiGetList('list_a')
       .then(() => { this.props.finishLoading(); });
   }
 
