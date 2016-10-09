@@ -39,7 +39,7 @@ class ListContainer extends React.Component {
     super();
     this.onSubmitFormAddTodo = this.onSubmitFormAddTodo.bind(this);
     this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
-    this.fetchListPromise = null;
+    this.promiseSet = new Set();
     this.state = {
       formTodo: ''
     };
@@ -51,20 +51,34 @@ class ListContainer extends React.Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.params.listId !== this.props.listId) {
-      this.fetchListPromise.cancel();
+      this.cancelPromises();
       this.props.startLoading();
       this.fetchList();
     }
   }
 
   onSubmitFormAddTodo({ text }) {
-    return this.props.apiPostTodo(text);
+    const p = this.props.apiPostTodo(text);
+    return this.addPromiseSet(p);
   }
 
   fetchList() {
-    this.fetchListPromise = this.props
+    const p = this.props
       .apiGetList(this.props.listId)
       .then(() => { this.props.finishLoading(); });
+    this.addPromiseSet(p);
+  }
+
+  addPromiseSet(p) {
+    this.promiseSet.add(p);
+    return p;
+  }
+
+  cancelPromises() {
+    for (const v of this.promiseSet.values()) {
+      v.cancel();
+    }
+    this.promiseSet.clear();
   }
 
   handleOnTouchTapMenuItem(type, todo) {
