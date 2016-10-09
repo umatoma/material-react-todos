@@ -11,9 +11,9 @@ export function apiGetUser() {
     const user = {
       id: 'umatoma',
       lists: [
-        { id: 'list_a', name: 'List A' },
-        { id: 'list_b', name: 'List B' },
-        { id: 'list_c', name: 'List C' }
+        { id: 'list_a', name: 'LIST_A' },
+        { id: 'list_b', name: 'LIST_B' },
+        { id: 'list_c', name: 'LIST_C' }
       ]
     };
     return new Promise((resolve) => {

@@ -125,8 +125,9 @@ class ListContainer extends React.Component {
     return (
       <Row>
         <Col xs={12}>
-          <Card style={{ padding: '16px' }}>
-            <FormAddTodo onSubmit={this.onSubmitFormAddTodo} />
+          <Card>
+            <CardTitle title={list.name} />
+            <FormAddTodo style={{ padding: '0 16px 16px 16px' }} onSubmit={this.onSubmitFormAddTodo} />
           </Card>
         </Col>
         <Col xs={6}>
