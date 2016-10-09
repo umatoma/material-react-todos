@@ -10,8 +10,7 @@ class PromiseCanceler {
    * @return {Promise}
    */
   add(p) {
-    this.set.add(p);
-    return p.then((...args) => {
+    const wrappedPromise = p.then((...args) => {
       this.set.delete(p);
       return Promise.resolve(...args);
     })
@@ -19,6 +18,8 @@ class PromiseCanceler {
       this.set.delete(p);
       return Promise.reject(err);
     });
+    this.set.add(wrappedPromise);
+    return wrappedPromise;
   }
 
   /**
