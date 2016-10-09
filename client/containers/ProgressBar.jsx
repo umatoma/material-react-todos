@@ -8,15 +8,22 @@ export default (WrappedComponent, option) => {
     showProgress: true
   }, option);
 
+  const initialState = {
+    isLoading: true,
+    snackbar: { open: false, message: '' }
+  };
+
   class ProgressBar extends Component {
     constructor(props) {
       super(props);
+      this.startLoading = this.startLoading.bind(this);
       this.finishLoading = this.finishLoading.bind(this);
       this.handleRequestClose = this.handleRequestClose.bind(this);
-      this.state = {
-        isLoading: true,
-        snackbar: { open: false, message: '' }
-      };
+      this.state = Object.assign({}, initialState);
+    }
+
+    startLoading() {
+      this.setState(Object.assign({}, initialState));
     }
 
     finishLoading(message) {
@@ -27,13 +34,13 @@ export default (WrappedComponent, option) => {
     }
 
     handleRequestClose() {
-      this.setState({ snackbar: { open: false, message: '' } });
+      this.setState({ snackbar: initialState.snackbar });
     }
 
     renderProgressBar() {
       const { isLoading } = this.state;
       const { showProgress } = progressOption;
-      if (showProgress === true && isLoading === true) {
+      if (showProgress && isLoading) {
         return <LinearProgress mode="indeterminate" color={pink500} />;
       }
       return null;
@@ -46,6 +53,7 @@ export default (WrappedComponent, option) => {
           <WrappedComponent
             {...this.props}
             isLoading={this.state.isLoading}
+            startLoading={this.startLoading}
             finishLoading={this.finishLoading}
           />
           <Snackbar
