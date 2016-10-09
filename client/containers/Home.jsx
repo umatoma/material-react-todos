@@ -1,10 +1,12 @@
 import React from 'react';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
-import { cyan500 } from 'material-ui/styles/colors';
+import { cyan500, blue500, green500 } from 'material-ui/styles/colors';
+import Pie from '../components/chartjs/Pie';
 
 const cardStyle = {
   textAlign: 'center',
   padding: '32px',
+  marginBottom: '8px',
   backgroundColor: cyan500
 };
 
@@ -20,11 +22,39 @@ const cardTextStyle = {
   fontSize: '20px'
 };
 
-const Home = () => (
-  <Card style={cardStyle}>
-    <CardTitle style={cardTitleStyle}>Welcome To Material React Todos</CardTitle>
-    <CardText style={cardTextStyle}>Sample React Todo application.</CardText>
-  </Card>
-);
+class Home extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      labels: ['Doing', 'Completed'],
+      datasets: [
+        {
+          data: [
+            Math.floor(Math.random() * 50),
+            Math.floor(Math.random() * 50)
+          ],
+          backgroundColor: [blue500, green500]
+        }
+      ]
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <Card style={cardStyle}>
+          <CardTitle style={cardTitleStyle}>Welcome To Material React Todos</CardTitle>
+          <CardText style={cardTextStyle}>Sample React Todo application.</CardText>
+        </Card>
+        <Card style={{ padding: '32px' }}>
+          <Pie
+            labels={this.state.labels}
+            datasets={this.state.datasets}
+          />
+        </Card>
+      </div>
+    );
+  }
+}
 
 export default Home;
