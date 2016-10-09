@@ -76,12 +76,12 @@ class ListContainer extends React.Component {
       switch (type) {
         case 'COMPLETE': {
           const updatedTodo = Object.assign({}, todo, { completed: true });
-          this.props.apiPutTodo(updatedTodo);
+          this.canceler.add(this.props.apiPutTodo(updatedTodo));
           break;
         }
         case 'DELETE': {
           const id = todo.id;
-          this.props.apiDeleteTodo(id);
+          this.canceler.add(this.props.apiDeleteTodo(id));
           break;
         }
         default:

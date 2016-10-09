@@ -11,7 +11,14 @@ class PromiseCanceler {
    */
   add(p) {
     this.set.add(p);
-    return p;
+    return p.then((...args) => {
+      this.set.delete(p);
+      return Promise.resolve(...args);
+    })
+    .catch((err) => {
+      this.set.delete(p);
+      return Promise.reject(err);
+    });
   }
 
   /**
