@@ -7,11 +7,11 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import TextField from 'material-ui/TextField';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDone from 'material-ui/svg-icons/action/done';
 import { blue500, green500, grey400 } from 'material-ui/styles/colors';
 import { Row, Col } from '../components/grid';
+import FormAddTodo from '../components/forms/AddTodo';
 import * as listActions from '../actions/list';
 
 const mapStateToProps = (state, ownProps) => ({
@@ -37,7 +37,7 @@ class ListContainer extends React.Component {
 
   constructor() {
     super();
-    this.handleSubmitTodoForm = this.handleSubmitTodoForm.bind(this);
+    this.onSubmitFormAddTodo = this.onSubmitFormAddTodo.bind(this);
     this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
     this.fetchListPromise = null;
     this.state = {
@@ -57,17 +57,14 @@ class ListContainer extends React.Component {
     }
   }
 
+  onSubmitFormAddTodo({ text }) {
+    return this.props.apiPostTodo(text);
+  }
+
   fetchList() {
     this.fetchListPromise = this.props
       .apiGetList(this.props.listId)
       .then(() => { this.props.finishLoading(); });
-  }
-
-  handleSubmitTodoForm(e) {
-    e.preventDefault();
-    this.props
-      .apiPostTodo(this.state.formTodo)
-      .then(() => { this.setState({ formTodo: '' }); });
   }
 
   handleOnTouchTapMenuItem(type, todo) {
@@ -126,14 +123,7 @@ class ListContainer extends React.Component {
       <Row>
         <Col xs={12}>
           <Card style={{ padding: '16px' }}>
-            <form onSubmit={this.handleSubmitTodoForm}>
-              <TextField
-                floatingLabelText="Todo"
-                fullWidth
-                onChange={(e) => { this.setState({ formTodo: e.target.value }); }}
-                value={this.state.formTodo}
-              />
-            </form>
+            <FormAddTodo onSubmit={this.onSubmitFormAddTodo} />
           </Card>
         </Col>
         <Col xs={6}>

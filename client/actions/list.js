@@ -41,8 +41,8 @@ export function apiGetList(id) {
 
 export function apiPostTodo(text) {
   return (dispatch, getState) => {
-    const { todos } = getState();
-    const id = todos.todos.length;
+    const { list } = getState();
+    const id = list.todos.length;
     const todo = { id, text, completed: false };
     return new Promise((resolve) => {
       setTimeout(() => {
