@@ -11,6 +11,7 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import userReducer from './reducers/user';
 import listReducer from './reducers/list';
 import App from './containers/App';
+import Home from './containers/Home';
 import List from './containers/List';
 import About from './containers/About';
 import NotFound from './containers/NotFound';
@@ -35,7 +36,7 @@ render(
           path="/"
           component={progressBar(App, { showProgress: false })}
         >
-          {/* <IndexRoute component={progressBar(Home)} /> */}
+          <IndexRoute component={Home} />
           <Route path="/lists/:listId" component={progressBar(List)} />
           <Route path="about" component={About} />
           <Route path="*" component={NotFound} />
