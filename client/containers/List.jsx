@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 import IconMenu from 'material-ui/IconMenu';
@@ -34,7 +33,8 @@ class ListContainer extends React.Component {
     apiGetList: PropTypes.func.isRequired,
     apiPostTodo: PropTypes.func.isRequired,
     apiPutTodo: PropTypes.func.isRequired,
-    apiDeleteTodo: PropTypes.func.isRequired
+    apiDeleteTodo: PropTypes.func.isRequired,
+    redirectToUnauthorized: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -76,7 +76,7 @@ class ListContainer extends React.Component {
       })
       .catch((err) => {
         if (err.status === 401) {
-          browserHistory.push('/unauthorized');
+          this.props.redirectToUnauthorized();
         }
       });
     this.canceler.add(p);

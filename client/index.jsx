@@ -10,13 +10,14 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import userReducer from './reducers/user';
 import listReducer from './reducers/list';
+import rogressBar from './components/ProgressBar';
+import auth from './components/Auth';
 import App from './containers/App';
 import Home from './containers/Home';
 import List from './containers/List';
 import About from './containers/About';
 import Unauthorized from './containers/Unauthorized';
 import NotFound from './containers/NotFound';
-import progressBar from './containers/ProgressBar';
 
 injectTapEventPlugin();
 
@@ -35,10 +36,10 @@ render(
       <Router history={history}>
         <Route
           path="/"
-          component={progressBar(App, { showProgress: false })}
+          component={rogressBar(App, { showProgress: false })}
         >
           <IndexRoute component={Home} />
-          <Route path="lists/:listId" component={progressBar(List)} />
+          <Route path="lists/:listId" component={rogressBar(auth(List))} />
           <Route path="about" component={About} />
           <Route path="unauthorized" component={Unauthorized} />
           <Route path="*" component={NotFound} />

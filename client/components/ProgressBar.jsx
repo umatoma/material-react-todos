@@ -3,6 +3,13 @@ import LinearProgress from 'material-ui/LinearProgress';
 import Snackbar from 'material-ui/Snackbar';
 import { pink500 } from 'material-ui/styles/colors';
 
+/**
+ * ProgressBar High Order Component
+ *
+ * @param {Component} WrappedComponent
+ * @param {Object} option
+ * @return {Component}
+ */
 export default (WrappedComponent, option) => {
   const progressOption = Object.assign({
     showProgress: true
@@ -22,10 +29,18 @@ export default (WrappedComponent, option) => {
       this.state = Object.assign({}, initialState);
     }
 
+    /**
+     * Set state as loading
+     */
     startLoading() {
       this.setState(Object.assign({}, initialState));
     }
 
+    /**
+     * Set state as done and show snackbar
+     *
+     * @param {String} message
+     */
     finishLoading(message) {
       this.setState({
         isLoading: false,
@@ -37,6 +52,9 @@ export default (WrappedComponent, option) => {
       this.setState({ snackbar: initialState.snackbar });
     }
 
+    /**
+     * render ProgressBar if loading
+     */
     renderProgressBar() {
       const { isLoading } = this.state;
       const { showProgress } = progressOption;
