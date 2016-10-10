@@ -13,7 +13,8 @@ export function apiGetUser() {
       lists: [
         { id: 'list_a', name: 'LIST_A' },
         { id: 'list_b', name: 'LIST_B' },
-        { id: 'list_c', name: 'LIST_C' }
+        { id: 'list_c', name: 'LIST_C' },
+        { id: 'unauthorized', name: 'UNAUTHORIZED' }
       ]
     };
     return new Promise((resolve) => {

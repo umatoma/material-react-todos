@@ -14,6 +14,7 @@ import App from './containers/App';
 import Home from './containers/Home';
 import List from './containers/List';
 import About from './containers/About';
+import Unauthorized from './containers/Unauthorized';
 import NotFound from './containers/NotFound';
 import progressBar from './containers/ProgressBar';
 
@@ -37,8 +38,9 @@ render(
           component={progressBar(App, { showProgress: false })}
         >
           <IndexRoute component={Home} />
-          <Route path="/lists/:listId" component={progressBar(List)} />
+          <Route path="lists/:listId" component={progressBar(List)} />
           <Route path="about" component={About} />
+          <Route path="unauthorized" component={Unauthorized} />
           <Route path="*" component={NotFound} />
         </Route>
       </Router>

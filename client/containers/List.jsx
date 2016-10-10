@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 import IconMenu from 'material-ui/IconMenu';
@@ -70,7 +71,14 @@ class ListContainer extends React.Component {
   fetchList() {
     const p = this.props
       .apiGetList(this.props.listId)
-      .then(() => { this.props.finishLoading(); });
+      .then(() => {
+        this.props.finishLoading();
+      })
+      .catch((err) => {
+        if (err.status === 401) {
+          browserHistory.push('/unauthorized');
+        }
+      });
     this.canceler.add(p);
   }
 

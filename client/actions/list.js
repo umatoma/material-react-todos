@@ -35,7 +35,15 @@ export function apiGetList(id) {
     return new Promise((resolve) => {
       setTimeout(() => { resolve(); }, 3000);
     })
-    .then(() => { dispatch(setList(list)); });
+    .then(() => {
+      if (['list_a', 'listb', 'list_c'].includes(id)) {
+        return dispatch(setList(list));
+      }
+
+      const err = new Error('Unauthorized');
+      err.status = 401;
+      return Promise.reject(err);
+    });
   };
 }
 
