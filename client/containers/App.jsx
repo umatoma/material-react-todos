@@ -2,7 +2,6 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import CircularProgress from 'material-ui/CircularProgress';
 import AppBar from 'material-ui/AppBar';
 import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
@@ -11,8 +10,9 @@ import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
 import NavigationMenu from 'material-ui/svg-icons/navigation/menu';
 import FileFolder from 'material-ui/svg-icons/file/folder';
-import { pink500, blueGrey900, cyan500, white } from 'material-ui/styles/colors';
+import { blueGrey900, cyan500, white } from 'material-ui/styles/colors';
 import * as userActions from '../actions/user';
+import FullProgress from '../components/FullProgress';
 
 const mapStateToProps = state => ({ user: state.user });
 const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch);
@@ -20,11 +20,10 @@ const mapDispatchToProps = dispatch => bindActionCreators(userActions, dispatch)
 class App extends React.Component {
   static propTypes = {
     children: PropTypes.element.isRequired,
-    isLoading: PropTypes.bool.isRequired,
     user: PropTypes.shape({
+      isFetching: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
       id: PropTypes.string.isRequired // eslint-disable-line react/no-unused-prop-types
     }).isRequired,
-    finishLoading: PropTypes.func.isRequired,
     apiGetUser: PropTypes.func.isRequired
   };
 
@@ -56,18 +55,15 @@ class App extends React.Component {
   componentDidMount() {
     this.props
       .apiGetUser()
-      .then(() => { this.props.finishLoading(); });
+      .then(() => { console.log('finish apiGetUser'); })
+      .catch((err) => { console.log(err.message); });
   }
 
   render() {
-    const { children, isLoading, user } = this.props;
+    const { children, user } = this.props;
 
-    if (isLoading) {
-      return (
-        <div style={{ width: '100vw', height: '100vh', textAlign: 'center' }}>
-          <CircularProgress size={100} thickness={5} color={pink500} style={{ top: '50%', marginTop: '-50px' }} />
-        </div>
-      );
+    if (user.isFetching) {
+      return <FullProgress />;
     }
 
     return (

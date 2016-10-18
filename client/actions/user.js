@@ -17,9 +17,10 @@ export function apiGetUser() {
         { id: 'unauthorized', name: 'UNAUTHORIZED' }
       ]
     };
+    dispatch(setUser({ isFetching: true }));
     return new Promise((resolve) => {
       setTimeout(() => {
-        dispatch(setUser(user));
+        dispatch(setUser(Object.assign({}, user, { isFetching: false })));
         resolve();
       }, 1500);
     });
