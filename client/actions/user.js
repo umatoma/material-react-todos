@@ -2,8 +2,8 @@ export const ACTIONS = {
   SET_USER: 'SET_USER'
 };
 
-export function setUser(user) {
-  return { type: ACTIONS.SET_USER, payload: { user } };
+export function setUser({ status, error, user }) {
+  return { type: ACTIONS.SET_USER, status, error, user };
 }
 
 export function apiGetUser() {
@@ -17,10 +17,10 @@ export function apiGetUser() {
         { id: 'unauthorized', name: 'UNAUTHORIZED' }
       ]
     };
-    dispatch(setUser({ isFetching: true }));
+    dispatch(setUser({ status: 'REQUEST' }));
     return new Promise((resolve) => {
       setTimeout(() => {
-        dispatch(setUser(Object.assign({}, user, { isFetching: false })));
+        dispatch(setUser({ status: 'SUCCESS', user }));
         resolve();
       }, 1500);
     });

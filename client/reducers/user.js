@@ -6,10 +6,23 @@ const initialState = {
   lists: []
 };
 
+const setUser = (state, action) => {
+  switch (action.status) {
+    case 'REQUEST':
+      return Object.assign({}, state, initialState);
+    case 'SUCCESS':
+      return Object.assign({}, state, action.user, { isFetching: false });
+    case 'FAILURE':
+      return Object.assign({}, state, { isFetching: false, error: action.error });
+    default:
+      return state;
+  }
+};
+
 export default (state = initialState, action) => {
   switch (action.type) {
     case ACTIONS.SET_USER:
-      return Object.assign({}, state, action.payload.user);
+      return setUser(state, action);
     default:
       return state;
   }
