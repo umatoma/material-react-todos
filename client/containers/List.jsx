@@ -14,19 +14,24 @@ import { blue500, green500, grey400, pink500 } from 'material-ui/styles/colors';
 import { Row, Col } from '../components/grid';
 import FormAddTodo from '../components/forms/AddTodo';
 import * as listActions from '../actions/list';
+import * as formActions from '../actions/form';
 import Canceler from '../lib/promise-canceler';
 
 const mapStateToProps = (state, ownProps) => ({
   list: state.list,
+  addTodoForm: state.form.addTodoForm,
   listId: ownProps.params.listId
 });
-const mapDispatchToProps = dispatch => bindActionCreators(listActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({
+  ...listActions,
+  ...formActions
+}, dispatch);
 
 class ListContainer extends React.Component {
   static propTypes = {
     list: PropTypes.shape({
       isFetching: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
-      error: PropTypes.any,
+      error: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
       todos: PropTypes.array.isRequired // eslint-disable-line react/no-unused-prop-types
     }).isRequired,
     listId: PropTypes.string.isRequired,
@@ -34,6 +39,9 @@ class ListContainer extends React.Component {
     apiPostTodo: PropTypes.func.isRequired,
     apiPutTodo: PropTypes.func.isRequired,
     apiDeleteTodo: PropTypes.func.isRequired,
+    addTodoForm: PropTypes.shape().isRequired,
+    initAddTodoForm: PropTypes.func.isRequired,
+    updateAddTodoForm: PropTypes.func.isRequired,
     redirectToUnauthorized: PropTypes.func.isRequired
   };
 
@@ -42,9 +50,6 @@ class ListContainer extends React.Component {
     this.onSubmitFormAddTodo = this.onSubmitFormAddTodo.bind(this);
     this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
     this.canceler = new Canceler();
-    this.state = {
-      formTodo: ''
-    };
   }
 
   componentDidMount() {
@@ -71,7 +76,9 @@ class ListContainer extends React.Component {
   }
 
   onSubmitFormAddTodo({ text }) {
-    const p = this.props.apiPostTodo(text);
+    const p = this.props.apiPostTodo(text)
+      .then(() => { this.props.initAddTodoForm(); })
+      .catch((err) => { this.props.updateAddTodoForm({ error: err.message }); });
     return this.canceler.add(p);
   }
 
@@ -120,7 +127,7 @@ class ListContainer extends React.Component {
   }
 
   render() {
-    const { list } = this.props;
+    const { list, addTodoForm, updateAddTodoForm } = this.props;
     const completedTodos = list.todos.filter(t => t.completed);
     const doingTodos = list.todos.filter(t => !t.completed);
 
@@ -140,7 +147,12 @@ class ListContainer extends React.Component {
         <Col xs={12}>
           <Card>
             <CardTitle title={list.name} />
-            <FormAddTodo style={{ padding: '0 16px 16px 16px' }} onSubmit={this.onSubmitFormAddTodo} />
+            <FormAddTodo
+              style={{ padding: '0 16px 16px 16px' }}
+              form={addTodoForm}
+              onUpdate={updateAddTodoForm}
+              onSubmit={this.onSubmitFormAddTodo}
+            />
           </Card>
         </Col>
         <Col xs={6}>

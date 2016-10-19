@@ -1,37 +1,42 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import TextField from 'material-ui/TextField';
 
 class AddTodo extends React.Component {
   static propTypes = {
-    onSubmit: React.PropTypes.func.isRequired
+    style: PropTypes.shape(),
+    form: PropTypes.shape({
+      error: PropTypes.any,
+      text: PropTypes.string.isRequired
+    }),
+    onUpdate: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired
   };
-
-  static getInitialState() {
-    return { text: '', error: null };
-  }
 
   constructor() {
     super();
+    this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = AddTodo.getInitialState();
+  }
+
+  handleChange(e) {
+    e.preventDefault();
+    this.props.onUpdate({ text: e.target.value });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.onSubmit(this.state)
-      .then(() => { this.setState(AddTodo.getInitialState()); })
-      .catch((err) => { this.setState({ error: err.message }); });
+    this.props.onSubmit(this.props.form);
   }
 
   render() {
     return (
-      <form {...this.props} onSubmit={this.handleSubmit}>
+      <form style={this.props.style} onSubmit={this.handleSubmit}>
         <TextField
-          floatingLabelText="Todo"
-          errorText={this.state.error}
           fullWidth
-          onChange={(e) => { this.setState({ text: e.target.value }); }}
-          value={this.state.text}
+          floatingLabelText="Todo"
+          errorText={this.props.form.error}
+          onChange={this.handleChange}
+          value={this.props.form.text}
         />
       </form>
     );

@@ -10,6 +10,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import userReducer from './reducers/user';
 import listReducer from './reducers/list';
+import formReducer from './reducers/form';
 import auth from './components/Auth';
 import App from './containers/App';
 import Home from './containers/Home';
@@ -23,6 +24,7 @@ injectTapEventPlugin();
 const reducers = combineReducers({
   user: userReducer,
   list: listReducer,
+  form: formReducer,
   routing: routerReducer
 });
 const loggerMiddleware = createLogger();
