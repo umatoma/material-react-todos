@@ -2,20 +2,14 @@ import React, { PropTypes } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
-import { List, ListItem } from 'material-ui/List';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import ActionAssignment from 'material-ui/svg-icons/action/assignment';
-import ActionDone from 'material-ui/svg-icons/action/done';
 import LinearProgress from 'material-ui/LinearProgress';
-import { blue500, green500, grey400, pink500 } from 'material-ui/styles/colors';
+import { pink500 } from 'material-ui/styles/colors';
 import { Row, Col } from '../components/grid';
 import FormAddTodo from '../components/forms/AddTodo';
 import * as listActions from '../actions/list';
 import * as formActions from '../actions/form';
 import Canceler from '../lib/promise-canceler';
+import Todos from '../components/List/Todos';
 
 const mapStateToProps = (state, ownProps) => ({
   list: state.list,
@@ -107,25 +101,6 @@ class ListContainer extends React.Component {
     };
   }
 
-  rightIconMenu(todo) {
-    return (
-      <IconMenu
-        iconButtonElement={
-          <IconButton>
-            <MoreVertIcon color={grey400} />
-          </IconButton>
-        }
-      >
-        <MenuItem onTouchTap={this.handleOnTouchTapMenuItem('COMPLETE', todo)}>
-          Complete
-        </MenuItem>
-        <MenuItem onTouchTap={this.handleOnTouchTapMenuItem('DELETE', todo)}>
-          Delete
-        </MenuItem>
-      </IconMenu>
-    );
-  }
-
   render() {
     const { list, addTodoForm, updateAddTodoForm } = this.props;
     const completedTodos = list.todos.filter(t => t.completed);
@@ -156,33 +131,10 @@ class ListContainer extends React.Component {
           </Card>
         </Col>
         <Col xs={6}>
-          <Card>
-            <CardTitle title="Doing" />
-            <List>
-              {doingTodos.map(todo =>
-                <ListItem
-                  key={todo.id}
-                  leftIcon={<ActionAssignment color={blue500} />}
-                  primaryText={todo.text}
-                  rightIconButton={this.rightIconMenu(todo)}
-                />
-              )}
-            </List>
-          </Card>
+          <Todos type="DOING" todos={doingTodos} onTouchTapMenuItem={this.handleOnTouchTapMenuItem} />
         </Col>
         <Col xs={6} style={{ paddingLeft: '0' }}>
-          <Card>
-            <CardTitle title="Completed" />
-            <List>
-              {completedTodos.map(todo =>
-                <ListItem
-                  key={todo.id}
-                  leftIcon={<ActionDone color={green500} />}
-                  primaryText={todo.text}
-                />
-              )}
-            </List>
-          </Card>
+          <Todos type="COMPLETED" todos={completedTodos} />
         </Col>
       </Row>
     );
