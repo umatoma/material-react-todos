@@ -32,17 +32,19 @@ export function apiGetList(id) {
       completed: (Math.random() >= 0.5)
     }));
     const list = { id, name: id.toUpperCase(), todos };
+
+    dispatch(setList({ isFetching: true }));
     return new Promise((resolve) => {
       setTimeout(() => { resolve(); }, 3000);
     })
     .then(() => {
       if (['list_a', 'listb', 'list_c'].includes(id)) {
-        return dispatch(setList(list));
+        return dispatch(setList(Object.assign({}, list, { isFetching: false, error: null })));
       }
 
       const err = new Error('Unauthorized');
       err.status = 401;
-      return Promise.reject(err);
+      return dispatch(setList({ error: err, isFetching: false }));
     });
   };
 }

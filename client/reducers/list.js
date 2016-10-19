@@ -1,6 +1,8 @@
 import { ACTIONS } from '../actions/list';
 
 const initialState = {
+  isFetching: true,
+  error: null,
   id: '',
   name: '',
   todos: []

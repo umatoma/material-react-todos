@@ -9,7 +9,8 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import ActionDone from 'material-ui/svg-icons/action/done';
-import { blue500, green500, grey400 } from 'material-ui/styles/colors';
+import LinearProgress from 'material-ui/LinearProgress';
+import { blue500, green500, grey400, pink500 } from 'material-ui/styles/colors';
 import { Row, Col } from '../components/grid';
 import FormAddTodo from '../components/forms/AddTodo';
 import * as listActions from '../actions/list';
@@ -23,11 +24,10 @@ const mapDispatchToProps = dispatch => bindActionCreators(listActions, dispatch)
 
 class ListContainer extends React.Component {
   static propTypes = {
-    isLoading: PropTypes.bool.isRequired,
-    startLoading: PropTypes.func.isRequired,
-    finishLoading: PropTypes.func.isRequired,
     list: PropTypes.shape({
-      todos: React.PropTypes.array.isRequired // eslint-disable-line react/no-unused-prop-types
+      isFetching: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
+      error: PropTypes.any,
+      todos: PropTypes.array.isRequired // eslint-disable-line react/no-unused-prop-types
     }).isRequired,
     listId: PropTypes.string.isRequired,
     apiGetList: PropTypes.func.isRequired,
@@ -52,9 +52,16 @@ class ListContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    const { list } = this.props;
+    const isUnathorized = !list.isFetching && list.error && list.error.status === 401;
+
+    if (isUnathorized) {
+      this.props.redirectToUnauthorized();
+      return;
+    }
+
     if (prevProps.params.listId !== this.props.listId) {
       this.canceler.cancelAll();
-      this.props.startLoading();
       this.fetchList();
     }
   }
@@ -69,16 +76,7 @@ class ListContainer extends React.Component {
   }
 
   fetchList() {
-    const p = this.props
-      .apiGetList(this.props.listId)
-      .then(() => {
-        this.props.finishLoading();
-      })
-      .catch((err) => {
-        if (err.status === 401) {
-          this.props.redirectToUnauthorized();
-        }
-      });
+    const p = this.props.apiGetList(this.props.listId);
     this.canceler.add(p);
   }
 
@@ -126,11 +124,14 @@ class ListContainer extends React.Component {
     const completedTodos = list.todos.filter(t => t.completed);
     const doingTodos = list.todos.filter(t => !t.completed);
 
-    if (this.props.isLoading) {
+    if (list.isFetching) {
       return (
-        <Card>
-          <CardText>Now Loading</CardText>
-        </Card>
+        <div>
+          <LinearProgress mode="indeterminate" color={pink500} />
+          <Card>
+            <CardText>Now Loading</CardText>
+          </Card>
+        </div>
       );
     }
 
