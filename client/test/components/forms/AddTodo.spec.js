@@ -26,6 +26,7 @@ describe('<AddTodo />', () => {
     const props = Object.assign({}, defaultProps);
     const wrapper = shallow(<AddTodo {...props} />);
     expect(wrapper.find('form')).to.have.length(1);
+    expect(wrapper.find('TextField[name="text"]')).to.have.length(1);
   });
 
   it('form.textの値がフォームに反映される', () => {
