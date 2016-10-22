@@ -32,6 +32,7 @@ class AddTodo extends React.Component {
     return (
       <form style={this.props.style} onSubmit={this.handleSubmit}>
         <TextField
+          name="text"
           fullWidth
           floatingLabelText="Todo"
           errorText={this.props.form.error}
