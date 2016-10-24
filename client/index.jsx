@@ -18,6 +18,7 @@ import List from './containers/List';
 import About from './containers/About';
 import Unauthorized from './containers/Unauthorized';
 import NotFound from './containers/NotFound';
+import { storeStorage, loadStorage } from './lib/store-storage';
 
 injectTapEventPlugin();
 
@@ -28,8 +29,19 @@ const reducers = combineReducers({
   routing: routerReducer
 });
 const loggerMiddleware = createLogger();
-const store = createStore(reducers, applyMiddleware(thunk, loggerMiddleware));
+const middlewares = [thunk, loggerMiddleware];
+const store = createStore(reducers, applyMiddleware(...middlewares));
 const history = syncHistoryWithStore(browserHistory, store);
+
+storeStorage(store, (prevState, nextState, setItem) => {
+  if (prevState.user.random !== nextState.user.random) {
+    setItem('user.random', nextState.user.random);
+  }
+});
+
+loadStorage(store, ['user.random'], (key, item, dispatch) => {
+  console.log(key, item);
+});
 
 render(
   <MuiThemeProvider>

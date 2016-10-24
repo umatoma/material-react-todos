@@ -3,7 +3,8 @@ import { ACTIONS } from '../actions/user';
 const initialState = {
   isFetching: true,
   id: '',
-  lists: []
+  lists: [],
+  random: Math.random()
 };
 
 const setUser = (state, action) => {
@@ -11,7 +12,8 @@ const setUser = (state, action) => {
     case 'REQUEST':
       return Object.assign({}, state, initialState);
     case 'SUCCESS':
-      return Object.assign({}, state, action.user, { isFetching: false });
+      console.log('update');
+      return Object.assign({}, state, action.user, { isFetching: false, random: Math.random() });
     case 'FAILURE':
       return Object.assign({}, state, { isFetching: false, error: action.error });
     default:
