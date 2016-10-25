@@ -8,8 +8,8 @@ import { Row, Col } from '../components/grid';
 import FormAddTodo from '../components/forms/AddTodo';
 import * as listActions from '../actions/list';
 import * as formActions from '../actions/form';
-import Canceler from '../lib/promise-canceler';
 import Todos from '../components/List/Todos';
+import Unauthorized from '../components/Unauthorized';
 
 const mapStateToProps = (state, ownProps) => ({
   list: state.list,
@@ -35,15 +35,13 @@ class ListContainer extends React.Component {
     apiDeleteTodo: PropTypes.func.isRequired,
     addTodoForm: PropTypes.shape().isRequired,
     initAddTodoForm: PropTypes.func.isRequired,
-    updateAddTodoForm: PropTypes.func.isRequired,
-    redirectToUnauthorized: PropTypes.func.isRequired
+    updateAddTodoForm: PropTypes.func.isRequired
   };
 
   constructor() {
     super();
     this.onSubmitFormAddTodo = this.onSubmitFormAddTodo.bind(this);
     this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
-    this.canceler = new Canceler();
   }
 
   componentDidMount() {
@@ -51,16 +49,7 @@ class ListContainer extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { list } = this.props;
-    const isUnathorized = !list.isFetching && list.error && list.error.status === 401;
-
-    if (isUnathorized) {
-      this.props.redirectToUnauthorized();
-      return;
-    }
-
     if (prevProps.params.listId !== this.props.listId) {
-      this.canceler.cancelAll();
       this.fetchList();
     }
   }
@@ -70,15 +59,13 @@ class ListContainer extends React.Component {
   }
 
   onSubmitFormAddTodo({ text }) {
-    const p = this.props.apiPostTodo(text)
+    this.props.apiPostTodo(text)
       .then(() => { this.props.initAddTodoForm(); })
       .catch((err) => { this.props.updateAddTodoForm({ error: err.message }); });
-    return this.canceler.add(p);
   }
 
   fetchList() {
-    const p = this.props.apiGetList(this.props.listId);
-    this.canceler.add(p);
+    this.props.apiGetList(this.props.listId);
   }
 
   handleOnTouchTapMenuItem(type, todo) {
@@ -105,6 +92,12 @@ class ListContainer extends React.Component {
     const { list, addTodoForm, updateAddTodoForm } = this.props;
     const completedTodos = list.todos.filter(t => t.completed);
     const doingTodos = list.todos.filter(t => !t.completed);
+
+    const isUnathorized = !list.isFetching && list.error && list.error.status === 401;
+
+    if (isUnathorized) {
+      return <Unauthorized />;
+    }
 
     if (list.isFetching) {
       return (

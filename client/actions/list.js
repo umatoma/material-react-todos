@@ -35,7 +35,7 @@ export function apiGetList(id) {
 
     dispatch(setList({ status: 'REQUEST' }));
     return new Promise((resolve) => {
-      setTimeout(() => { resolve(); }, 3000);
+      setTimeout(() => { resolve(); }, 500);
     })
     .then(() => {
       if (['list_a', 'listb', 'list_c'].includes(id)) {
