@@ -10,34 +10,28 @@ import ActionDone from 'material-ui/svg-icons/action/done';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import { blue500, green500, grey400 } from 'material-ui/styles/colors';
 
-function rightIconMenu(onTouchTapMenuItem, todo) {
-  return (
-    <IconMenu
-      iconButtonElement={
-        <IconButton>
-          <MoreVertIcon color={grey400} />
-        </IconButton>
-      }
-    >
-      <MenuItem onTouchTap={onTouchTapMenuItem('COMPLETE', todo)}>
-        Complete
-      </MenuItem>
-      <MenuItem onTouchTap={onTouchTapMenuItem('DELETE', todo)}>
-        Delete
-      </MenuItem>
-    </IconMenu>
-  );
-}
-
 class Todos extends React.Component {
   static propTypes = {
     todos: PropTypes.arrayOf(PropTypes.object).isRequired,
     type: PropTypes.string.isRequired,
-    onTouchTapMenuItem: PropTypes.func
+    onTouchTapCompleteMenu: PropTypes.func,
+    onTouchTapDeleteMenu: PropTypes.func
   };
 
   shouldComponentUpdate(nextProps) {
     return this.props.todos.length !== nextProps.todos.length;
+  }
+
+  handleTouchTapCompleteMenu(todo) {
+    return () => {
+      this.props.onTouchTapCompleteMenu(todo);
+    };
+  }
+
+  handleTouchTapDeleteMenu(todo) {
+    return () => {
+      this.props.onTouchTapDeleteMenu(todo);
+    };
   }
 
   render() {
@@ -53,7 +47,24 @@ class Todos extends React.Component {
                 key={todo.id}
                 leftIcon={<ActionAssignment color={blue500} />}
                 primaryText={todo.text}
-                rightIconButton={rightIconMenu(this.props.onTouchTapMenuItem, todo)}
+                rightIconButton={
+                  <IconMenu
+                    iconButtonElement={
+                      <IconButton>
+                        <MoreVertIcon color={grey400} />
+                      </IconButton>
+                    }
+                  >
+                    <MenuItem
+                      primaryText="Complete"
+                      onTouchTap={this.handleTouchTapCompleteMenu(todo)}
+                    />
+                    <MenuItem
+                      primaryText="Delete"
+                      onTouchTap={this.handleTouchTapDeleteMenu(todo)}
+                    />
+                  </IconMenu>
+                }
               />
             )}
           </List>

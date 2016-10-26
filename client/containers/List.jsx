@@ -41,7 +41,8 @@ class ListContainer extends React.Component {
   constructor() {
     super();
     this.onSubmitFormAddTodo = this.onSubmitFormAddTodo.bind(this);
-    this.handleOnTouchTapMenuItem = this.handleOnTouchTapMenuItem.bind(this);
+    this.handleOnTouchTapCompleteMenu = this.handleOnTouchTapCompleteMenu.bind(this);
+    this.handleOnTouchTapDeleteMenu = this.handleOnTouchTapDeleteMenu.bind(this);
   }
 
   componentDidMount() {
@@ -68,24 +69,14 @@ class ListContainer extends React.Component {
     this.props.apiGetList(this.props.listId);
   }
 
-  handleOnTouchTapMenuItem(type, todo) {
-    return (e) => {
-      e.preventDefault();
-      switch (type) {
-        case 'COMPLETE': {
-          const updatedTodo = Object.assign({}, todo, { completed: true });
-          this.canceler.add(this.props.apiPutTodo(updatedTodo));
-          break;
-        }
-        case 'DELETE': {
-          const id = todo.id;
-          this.canceler.add(this.props.apiDeleteTodo(id));
-          break;
-        }
-        default:
-          break;
-      }
-    };
+  handleOnTouchTapCompleteMenu(todo) {
+    const updatedTodo = Object.assign({}, todo, { completed: true });
+    this.props.apiPutTodo(updatedTodo);
+  }
+
+  handleOnTouchTapDeleteMenu(todo) {
+    const id = todo.id;
+    this.props.apiDeleteTodo(id);
   }
 
   render() {
@@ -124,7 +115,12 @@ class ListContainer extends React.Component {
           </Card>
         </Col>
         <Col xs={6}>
-          <Todos type="DOING" todos={doingTodos} onTouchTapMenuItem={this.handleOnTouchTapMenuItem} />
+          <Todos
+            type="DOING"
+            todos={doingTodos}
+            onTouchTapCompleteMenu={this.handleOnTouchTapCompleteMenu}
+            onTouchTapDeleteMenu={this.handleOnTouchTapDeleteMenu}
+          />
         </Col>
         <Col xs={6} style={{ paddingLeft: '0' }}>
           <Todos type="COMPLETED" todos={completedTodos} />
