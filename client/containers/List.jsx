@@ -21,7 +21,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   ...formActions
 }, dispatch);
 
-class ListContainer extends React.Component {
+export class ListContainer extends React.Component {
   static propTypes = {
     list: PropTypes.shape({
       isFetching: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
