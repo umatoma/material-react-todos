@@ -55,10 +55,6 @@ export class ListContainer extends React.Component {
     }
   }
 
-  componentWillUnmount() {
-    this.canceler.cancelAll();
-  }
-
   onSubmitFormAddTodo({ text }) {
     this.props.apiPostTodo(text)
       .then(() => { this.props.initAddTodoForm(); })

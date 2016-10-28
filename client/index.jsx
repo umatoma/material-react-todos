@@ -16,6 +16,7 @@ import Home from './containers/Home';
 import List from './containers/List';
 import About from './containers/About';
 import NotFound from './containers/NotFound';
+import Users from './containers//Users';
 import { storeStorage, loadStorage } from './lib/store-storage';
 
 injectTapEventPlugin();
@@ -49,6 +50,7 @@ render(
           <IndexRoute component={Home} />
           <Route path="lists/:listId" component={List} />
           <Route path="about" component={About} />
+          <Route path="users" component={Users} />
           <Route path="*" component={NotFound} />
         </Route>
       </Router>
