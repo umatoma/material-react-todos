@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unused-prop-types */
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Card, CardTitle } from 'material-ui/Card';
 import { List, ListItem } from 'material-ui/List';
 import IconMenu from 'material-ui/IconMenu';
@@ -12,14 +13,14 @@ import { blue500, green500, grey400 } from 'material-ui/styles/colors';
 
 class Todos extends React.Component {
   static propTypes = {
-    todos: PropTypes.arrayOf(PropTypes.object).isRequired,
+    todos: ImmutablePropTypes.list.isRequired,
     type: PropTypes.string.isRequired,
     onTouchTapCompleteMenu: PropTypes.func,
     onTouchTapDeleteMenu: PropTypes.func
   };
 
   shouldComponentUpdate(nextProps) {
-    return this.props.todos.length !== nextProps.todos.length;
+    return this.props.todos !== nextProps.todos;
   }
 
   handleTouchTapCompleteMenu(todo) {

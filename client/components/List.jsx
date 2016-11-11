@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Card, CardText, CardTitle } from 'material-ui/Card';
 import LinearProgress from 'material-ui/LinearProgress';
 import { pink500 } from 'material-ui/styles/colors';
@@ -9,11 +10,11 @@ import Unauthorized from '../components/Unauthorized';
 
 export class ListComponent extends React.Component {
   static propTypes = {
-    list: PropTypes.shape({
-      isFetching: PropTypes.bool.isRequired, // eslint-disable-line react/no-unused-prop-types
-      error: PropTypes.any, // eslint-disable-line react/no-unused-prop-types
-      todos: PropTypes.array.isRequired // eslint-disable-line react/no-unused-prop-types
-    }).isRequired,
+    isFetching: PropTypes.bool.isRequired,
+    error: PropTypes.instanceOf(Error),
+    name: PropTypes.string.isRequired,
+    completedTodos: ImmutablePropTypes.list.isRequired,
+    doingTodos: ImmutablePropTypes.list.isRequired,
     listId: PropTypes.string.isRequired,
     apiGetList: PropTypes.func.isRequired,
     apiPostTodo: PropTypes.func.isRequired,
@@ -62,17 +63,16 @@ export class ListComponent extends React.Component {
   }
 
   render() {
-    const { list, addTodoForm, updateAddTodoForm } = this.props;
-    const completedTodos = list.todos.filter(t => t.completed);
-    const doingTodos = list.todos.filter(t => !t.completed);
-
-    const isUnathorized = !list.isFetching && list.error && list.error.status === 401;
+    const {
+      isFetching, error, name, completedTodos, doingTodos, addTodoForm, updateAddTodoForm
+    } = this.props;
+    const isUnathorized = !isFetching && error && error.status === 401;
 
     if (isUnathorized) {
       return <Unauthorized />;
     }
 
-    if (list.isFetching) {
+    if (isFetching) {
       return (
         <div>
           <LinearProgress mode="indeterminate" color={pink500} />
@@ -87,7 +87,7 @@ export class ListComponent extends React.Component {
       <Row>
         <Col xs={12}>
           <Card>
-            <CardTitle title={list.name} />
+            <CardTitle title={name} />
             <FormAddTodo
               style={{ padding: '0 16px 16px 16px' }}
               form={addTodoForm}

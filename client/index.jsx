@@ -1,5 +1,6 @@
 import React from 'react';
 import { render } from 'react-dom';
+import Immutable from 'immutable';
 import { combineReducers, createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import { Router, Route, IndexRoute, browserHistory } from 'react-router';
@@ -27,7 +28,19 @@ const reducers = combineReducers({
   form: formReducer,
   routing: routerReducer
 });
-const loggerMiddleware = createLogger();
+const loggerMiddleware = createLogger({
+  stateTransformer: (state) => {
+    const newState = {};
+    for (const i of Object.keys(state)) {
+      if (Immutable.Iterable.isIterable(state[i])) {
+        newState[i] = state[i].toJS();
+      } else {
+        newState[i] = state[i];
+      }
+    }
+    return newState;
+  }
+});
 const middlewares = [thunk, loggerMiddleware];
 const store = createStore(reducers, applyMiddleware(...middlewares));
 const history = syncHistoryWithStore(browserHistory, store);

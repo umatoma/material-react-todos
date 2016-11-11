@@ -1,41 +1,47 @@
+import { Record, List } from 'immutable';
 import { ACTIONS } from '../actions/list';
 
-const initialState = {
+const ListStore = new Record({
   isFetching: true,
   error: null,
   id: '',
   name: '',
-  todos: []
-};
+  todos: new List()
+});
 
 const setList = (state, action) => {
   switch (action.status) {
     case 'REQUEST':
-      return Object.assign({}, state, initialState);
+      return new ListStore();
     case 'SUCCESS':
-      return Object.assign({}, state, action.list, { isFetching: false });
+      return state.set('isFetching', false)
+        .set('error', null)
+        .set('id', action.list.id)
+        .set('name', action.list.name)
+        .set('todos', new List(action.list.todos));
     case 'FAILURE':
-      return Object.assign({}, state, { isFetching: false, error: action.error });
+      return new ListStore().set('isFetching', false)
+        .set('error', action.error);
     default:
       return state;
   }
 };
 
-export default (state = initialState, action) => {
+export default (state = new ListStore(), action) => {
   switch (action.type) {
     case ACTIONS.SET_LIST:
       return setList(state, action);
     case ACTIONS.ADD_TODO:
-      return { ...state, todos: [action.payload.todo, ...state.todos] };
+      return state.todos.push(action.payload.todo);
     case ACTIONS.UPDATE_TODO: {
       const { todo } = action.payload;
-      const todos = state.todos.map(t => ((todo.id === t.id) ? todo : t));
-      return { ...state, todos };
+      const idx = state.todos.findIndex(v => v.id === todo.id);
+      return state.update('todos', todos => todos.update(idx, () => todo));
     }
     case ACTIONS.REMOVE_TODO: {
       const { id } = action.payload;
-      const todos = state.todos.filter(t => (id !== t.id));
-      return { ...state, todos };
+      const idx = state.todos.findIndex(v => v.id === id);
+      return state.update('todos', todos => todos.delete(idx));
     }
     default:
       return state;

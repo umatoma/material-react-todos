@@ -5,7 +5,11 @@ import * as formActions from '../actions/form';
 import List from '../components/List';
 
 const mapStateToProps = (state, ownProps) => ({
-  list: state.list,
+  isFetching: state.list.isFetching,
+  error: state.list.error,
+  name: state.list.name,
+  completedTodos: state.list.todos.filter(t => t.completed),
+  doingTodos: state.list.todos.filter(t => !t.completed),
   addTodoForm: state.form.addTodoForm,
   listId: ownProps.params.listId
 });
