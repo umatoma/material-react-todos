@@ -12,14 +12,15 @@ const ListStore = new Record({
 const setList = (state, action) => {
   switch (action.status) {
     case 'REQUEST':
-      return new ListStore();
+      return new ListStore({ id: action.id });
     case 'SUCCESS':
+      if (state.id !== action.id) return state;
       return state.set('isFetching', false)
         .set('error', null)
-        .set('id', action.list.id)
         .set('name', action.list.name)
         .set('todos', new List(action.list.todos));
     case 'FAILURE':
+      if (state.id !== action.id) return state;
       return new ListStore().set('isFetching', false)
         .set('error', action.error);
     default:

@@ -8,8 +8,8 @@ export const ACTIONS = {
   REMOVE_TODO: 'REMOVE_TODO'
 };
 
-export function setList({ status, error, list }) {
-  return { type: ACTIONS.SET_LIST, status, error, list };
+export function setList({ status, error, id, list }) {
+  return { type: ACTIONS.SET_LIST, status, error, id, list };
 }
 
 export function addTodo(todo) {
@@ -33,18 +33,19 @@ export function apiGetList(id) {
     }));
     const list = { id, name: id.toUpperCase(), todos };
 
-    dispatch(setList({ status: 'REQUEST' }));
+    dispatch(setList({ status: 'REQUEST', id }));
     return new Promise((resolve) => {
-      setTimeout(() => { resolve(); }, 500);
+      const t = _.random(100, 1000);
+      setTimeout(() => { resolve(); }, t);
     })
     .then(() => {
       if (['list_a', 'listb', 'list_c'].includes(id)) {
-        return dispatch(setList({ status: 'SUCCESS', list }));
+        return dispatch(setList({ status: 'SUCCESS', id, list }));
       }
 
       const error = new Error('Unauthorized');
       error.status = 401;
-      return dispatch(setList({ status: 'FAILURE', error }));
+      return dispatch(setList({ status: 'FAILURE', id, error }));
     });
   };
 }
