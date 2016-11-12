@@ -12,16 +12,16 @@ export function setList({ status, error, id, list }) {
   return { type: ACTIONS.SET_LIST, status, error, id, list };
 }
 
-export function addTodo(todo) {
-  return { type: ACTIONS.ADD_TODO, payload: { todo } };
+export function addTodo({ listId, todo }) {
+  return { type: ACTIONS.ADD_TODO, listId, todo };
 }
 
-export function updateTodo(todo) {
-  return { type: ACTIONS.UPDATE_TODO, payload: { todo } };
+export function updateTodo({ listId, todo }) {
+  return { type: ACTIONS.UPDATE_TODO, listId, todo };
 }
 
-export function removeTodo(id) {
-  return { type: ACTIONS.REMOVE_TODO, payload: { id } };
+export function removeTodo({ listId, id }) {
+  return { type: ACTIONS.REMOVE_TODO, listId, id };
 }
 
 export function apiGetList(id) {
@@ -53,34 +53,43 @@ export function apiGetList(id) {
 export function apiPostTodo(text) {
   return (dispatch, getState) => {
     const { list } = getState();
+    const listId = list.id;
     const id = list.todos.length;
     const todo = { id, text, completed: false };
-    return new Promise((resolve) => {
-      setTimeout(() => { resolve(); }, 500);
-    })
-    .then(() => {
-      if (todo.text.trim().length === 0) {
-        return Promise.reject(new Error('This field is required.'));
-      }
-      return dispatch(addTodo(todo));
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (todo.text.trim().length === 0) {
+          return reject(new Error('This field is required.'));
+        }
+        dispatch(addTodo({ listId, todo }));
+        return resolve();
+      }, 500);
     });
   };
 }
 
 export function apiPutTodo(todo) {
-  return dispatch => new Promise((resolve) => {
-    setTimeout(() => {
-      dispatch(updateTodo(todo));
-      resolve();
-    }, 500);
-  });
+  return (dispatch, getState) => {
+    const { list } = getState();
+    const listId = list.id;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        dispatch(updateTodo({ listId, todo }));
+        return resolve();
+      }, 500);
+    });
+  };
 }
 
 export function apiDeleteTodo(id) {
-  return dispatch => new Promise((resolve) => {
-    setTimeout(() => {
-      dispatch(removeTodo(id));
-      resolve();
-    }, 500);
-  });
+  return (dispatch, getState) => {
+    const { list } = getState();
+    const listId = list.id;
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        dispatch(removeTodo({ listId, id }));
+        return resolve();
+      }, 500);
+    });
+  };
 }

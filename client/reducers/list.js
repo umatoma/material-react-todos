@@ -33,15 +33,16 @@ export default (state = new ListStore(), action) => {
     case ACTIONS.SET_LIST:
       return setList(state, action);
     case ACTIONS.ADD_TODO:
+      if (state.id !== action.listId) return state;
       return state.todos.push(action.payload.todo);
     case ACTIONS.UPDATE_TODO: {
-      const { todo } = action.payload;
-      const idx = state.todos.findIndex(v => v.id === todo.id);
-      return state.update('todos', todos => todos.update(idx, () => todo));
+      if (state.id !== action.listId) return state;
+      const idx = state.todos.findIndex(v => v.id === action.todo.id);
+      return state.update('todos', todos => todos.update(idx, () => action.todo));
     }
     case ACTIONS.REMOVE_TODO: {
-      const { id } = action.payload;
-      const idx = state.todos.findIndex(v => v.id === id);
+      if (state.id !== action.listId) return state;
+      const idx = state.todos.findIndex(v => v.id === action.id);
       return state.update('todos', todos => todos.delete(idx));
     }
     default:
