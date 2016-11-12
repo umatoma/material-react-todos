@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 import TextField from 'material-ui/TextField';
 
 class AddTodo extends React.Component {
   static propTypes = {
     style: PropTypes.shape(),
-    form: PropTypes.shape({
-      error: PropTypes.any,
+    form: ImmutablePropTypes.mapContains({
+      error: PropTypes.instanceOf(Error),
       text: PropTypes.string.isRequired
     }),
     onUpdate: PropTypes.func.isRequired,
@@ -18,6 +19,10 @@ class AddTodo extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.form !== nextProps.form;
+  }
+
   handleChange(e) {
     e.preventDefault();
     this.props.onUpdate({ text: e.target.value });
@@ -25,7 +30,8 @@ class AddTodo extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.props.onSubmit(this.props.form);
+    const { text } = this.props.form.toObject();
+    this.props.onSubmit({ text });
   }
 
   render() {
@@ -35,9 +41,9 @@ class AddTodo extends React.Component {
           name="text"
           fullWidth
           floatingLabelText="Todo"
-          errorText={this.props.form.error}
+          errorText={this.props.form.get('error')}
           onChange={this.handleChange}
-          value={this.props.form.text}
+          value={this.props.form.get('text')}
         />
       </form>
     );

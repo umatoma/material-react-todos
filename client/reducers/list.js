@@ -1,7 +1,7 @@
 import { Record, List } from 'immutable';
 import { ACTIONS } from '../actions/list';
 
-const ListStore = new Record({
+const ListSate = new Record({
   isFetching: true,
   error: null,
   id: '',
@@ -12,7 +12,7 @@ const ListStore = new Record({
 const setList = (state, action) => {
   switch (action.status) {
     case 'REQUEST':
-      return new ListStore({ id: action.id });
+      return new ListSate({ id: action.id });
     case 'SUCCESS':
       if (state.id !== action.id) return state;
       return state.set('isFetching', false)
@@ -21,14 +21,14 @@ const setList = (state, action) => {
         .set('todos', new List(action.list.todos));
     case 'FAILURE':
       if (state.id !== action.id) return state;
-      return new ListStore().set('isFetching', false)
+      return new ListSate().set('isFetching', false)
         .set('error', action.error);
     default:
       return state;
   }
 };
 
-export default (state = new ListStore(), action) => {
+export default (state = new ListSate(), action) => {
   switch (action.type) {
     case ACTIONS.SET_LIST:
       return setList(state, action);

@@ -1,19 +1,19 @@
-import update from 'react-addons-update';
+import { Record, Map } from 'immutable';
 import { ACTIONS } from '../actions/form';
 
-const initialState = {
-  addTodoForm: {
+const FormState = new Record({
+  addTodoForm: new Map({
     error: null,
     text: ''
-  }
-};
+  })
+});
 
-export default (state = initialState, action) => {
+export default (state = new FormState(), action) => {
   switch (action.type) {
     case ACTIONS.INIT_ADD_TODO_FORM:
-      return Object.assign({}, state, { addTodoForm: initialState.addTodoForm });
+      return state.set('addTodoForm', new FormState().addTodoForm);
     case ACTIONS.UPDATE_ADD_TODO_FORM:
-      return update(state, { addTodoForm: { $merge: action.form } });
+      return state.update('addTodoForm', addTodoForm => addTodoForm.merge(action.form));
     default:
       return state;
   }
