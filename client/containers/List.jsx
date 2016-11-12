@@ -8,6 +8,7 @@ import { completedTodosSelector, doingTodosSelector } from '../selectors/list';
 
 const mapStateToProps = (state, ownProps) => ({
   listId: ownProps.params.listId,
+  isUnathorized: !state.list.isFetching && state.list.error && state.list.error.status === 401,
   isFetching: state.list.isFetching,
   error: state.list.error,
   name: state.list.name,
@@ -27,17 +28,17 @@ class ListContainer extends React.Component {
   };
 
   componentDidMount() {
-    this.fetchList();
+    this.fetchList(this.props.listId);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.params.listId !== this.props.listId) {
-      this.fetchList();
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.listId !== this.props.listId) {
+      this.fetchList(nextProps.params.listId);
     }
   }
 
-  fetchList() {
-    this.props.apiGetList(this.props.listId);
+  fetchList(listId) {
+    this.props.apiGetList(listId);
   }
 
   render() {
