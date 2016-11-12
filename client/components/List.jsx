@@ -15,8 +15,6 @@ export class ListComponent extends React.Component {
     name: PropTypes.string.isRequired,
     completedTodos: ImmutablePropTypes.list.isRequired,
     doingTodos: ImmutablePropTypes.list.isRequired,
-    listId: PropTypes.string.isRequired,
-    apiGetList: PropTypes.func.isRequired,
     apiPostTodo: PropTypes.func.isRequired,
     apiPutTodo: PropTypes.func.isRequired,
     apiDeleteTodo: PropTypes.func.isRequired,
@@ -32,24 +30,10 @@ export class ListComponent extends React.Component {
     this.handleOnTouchTapDeleteMenu = this.handleOnTouchTapDeleteMenu.bind(this);
   }
 
-  componentDidMount() {
-    this.fetchList();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (prevProps.params.listId !== this.props.listId) {
-      this.fetchList();
-    }
-  }
-
   onSubmitFormAddTodo({ text }) {
     this.props.apiPostTodo(text)
       .then(() => { this.props.initAddTodoForm(); })
       .catch((err) => { this.props.updateAddTodoForm({ error: err.message }); });
-  }
-
-  fetchList() {
-    this.props.apiGetList(this.props.listId);
   }
 
   handleOnTouchTapCompleteMenu(todo) {
