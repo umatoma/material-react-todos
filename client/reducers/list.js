@@ -9,6 +9,8 @@ const ListSate = new Record({
   todos: new List()
 });
 
+window.hoge = new ListSate();
+
 const setList = (state, action) => {
   switch (action.status) {
     case 'REQUEST':
@@ -34,7 +36,7 @@ export default (state = new ListSate(), action) => {
       return setList(state, action);
     case ACTIONS.ADD_TODO:
       if (state.id !== action.listId) return state;
-      return state.todos.push(action.payload.todo);
+      return state.update('todos', todos => todos.push(action.todo));
     case ACTIONS.UPDATE_TODO: {
       if (state.id !== action.listId) return state;
       const idx = state.todos.findIndex(v => v.id === action.todo.id);

@@ -54,7 +54,7 @@ export function apiPostTodo(text) {
   return (dispatch, getState) => {
     const { list } = getState();
     const listId = list.id;
-    const id = list.todos.length;
+    const id = list.todos.size;
     const todo = { id, text, completed: false };
     return new Promise((resolve, reject) => {
       setTimeout(() => {
